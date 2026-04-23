@@ -148,9 +148,9 @@ export default function Contact() {
     },
     { 
       icon: "email", 
-      href: "mailto:hello@jordanw.dev", 
+      href: "mailto:jrwaldehzx@gmail.com", 
       label: "Email",
-      description: "hello@jordanw.dev"
+      description: "jrwaldehzx@gmail.com"
     },
   ];
 
@@ -276,8 +276,8 @@ export default function Contact() {
 
               <div className="mt-8 p-4 rounded-xl bg-neon-cyan/5 border border-neon-cyan/20">
                 <p className="text-sm text-zinc-400 mb-2">Prefer a direct approach?</p>
-                <a href="mailto:hello@jordanw.dev" className="text-neon-cyan font-medium hover:underline">
-                  hello@jordanw.dev
+                <a href="mailto:jrwaldehzx@gmail.com" className="text-neon-cyan font-medium hover:underline">
+                  jrwaldehzx@gmail.com
                 </a>
               </div>
             </div>
