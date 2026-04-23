@@ -1,7 +1,4 @@
 import { NextResponse } from "next/server";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY || "re_xxx");
 
 export async function POST(request: Request) {
   try {
@@ -14,6 +11,27 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // Check if Resend API key is configured
+    const apiKey = process.env.RESEND_API_KEY;
+    
+    if (!apiKey || apiKey === "re_xxx") {
+      // Demo mode - just log and return success
+      console.log("=== Contact Form Submission (Demo) ===");
+      console.log(`Name: ${name}`);
+      console.log(`Email: ${email}`);
+      console.log(`Message: ${message}`);
+      console.log("=========================================");
+      
+      return NextResponse.json(
+        { success: true, message: "Message sent successfully! (Demo mode)" },
+        { status: 200 }
+      );
+    }
+
+    // Import Resend only when API key is configured
+    const { Resend } = await import("resend");
+    const resend = new Resend(apiKey);
 
     const { data, error } = await resend.emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
