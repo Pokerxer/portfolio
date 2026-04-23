@@ -121,10 +121,23 @@ export default function Contact() {
     e.preventDefault();
     setSubmitting(true);
     
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setSubmitting(false);
-    setSubmitted(true);
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formState),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send");
+      }
+
+      setSubmitting(false);
+      setSubmitted(true);
+    } catch (error) {
+      setSubmitting(false);
+      alert("Failed to send message. Please try again or email directly.");
+    }
   };
 
   const socialLinks = [
