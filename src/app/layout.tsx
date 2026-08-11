@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import SiteFooter from "@/components/layout/SiteFooter";
+import SiteHeader from "@/components/layout/SiteHeader";
+import SkipLink from "@/components/layout/SkipLink";
 import { body, display, mono } from "@/lib/fonts";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
@@ -25,8 +28,13 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
       </head>
-      <body className="min-h-screen bg-bg text-fg">
-        <main id="main">{children}</main>
+      <body className="flex min-h-screen flex-col bg-bg text-fg">
+        <SkipLink />
+        <SiteHeader />
+        <main id="main" className="flex-1">
+          {children}
+        </main>
+        <SiteFooter />
       </body>
     </html>
   );
