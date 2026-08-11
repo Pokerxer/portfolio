@@ -2,14 +2,35 @@ import type { Metadata } from "next";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SkipLink from "@/components/layout/SkipLink";
+import { SITE_URL, site } from "@/content/site";
 import { body, display, mono } from "@/lib/fonts";
 import { THEME_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Jordan Waldehz | Full-Stack Developer",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Jordan Waldehz — Full-Stack Engineer",
+    template: "%s · Jordan Waldehz",
+  },
   description:
-    "Full-Stack JavaScript Developer creating performant, accessible, and beautiful web experiences.",
+    "Full-stack JavaScript engineer building commerce platforms and web products that ship. Next.js, TypeScript, React.",
+  openGraph: { type: "website", siteName: "Jordan Waldehz", locale: "en_US" },
+  twitter: { card: "summary_large_image" },
+  alternates: { canonical: "/" },
+};
+
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: site.name,
+  jobTitle: site.role,
+  url: SITE_URL,
+  email: `mailto:${site.email}`,
+  address: { "@type": "PostalAddress", addressLocality: site.location },
+  sameAs: site.socials
+    .filter((social) => social.href.startsWith("http"))
+    .map((social) => social.href),
 };
 
 export default function RootLayout({
@@ -27,6 +48,10 @@ export default function RootLayout({
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
       </head>
       <body className="flex min-h-screen flex-col bg-bg text-fg">
         <SkipLink />

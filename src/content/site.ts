@@ -1,3 +1,9 @@
+// TODO(jordan): set NEXT_PUBLIC_SITE_URL in the Vercel project once the real
+// domain is attached. Everything canonical — sitemap, robots, OG tags — keys
+// off this value.
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://jordanwaldehz.vercel.app";
+
 export type Social = {
   label: string;
   href: string;
