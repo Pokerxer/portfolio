@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import ClosingCTA from "@/components/sections/ClosingCTA";
 import ProjectGrid from "@/components/sections/ProjectGrid";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { projects } from "@/content/projects";
@@ -12,20 +13,24 @@ export const metadata: Metadata = {
 
 export default function WorkPage() {
   return (
-    <div className="container-editorial py-20">
-      <SectionHeading
-        eyebrow="Selected work"
-        title="Five products, all live in production."
-      />
+    <>
+      <section className="container-editorial py-20">
+        <SectionHeading
+          eyebrow="Selected work"
+          title="Five products, all live in production."
+        />
 
-      <p className="type-lead mt-6 max-w-prose text-muted">
-        Storefronts, booking flows, and the admin tooling behind them. Every
-        entry below has a public URL you can open right now.
-      </p>
+        <p className="type-lead mt-6 max-w-prose text-muted">
+          Storefronts, booking flows, and the admin tooling behind them. Every
+          entry below has a public URL you can open right now.
+        </p>
 
-      <div className="mt-14">
-        <ProjectGrid projects={projects} />
-      </div>
-    </div>
+        <div className="mt-14">
+          <ProjectGrid projects={projects} />
+        </div>
+      </section>
+
+      <ClosingCTA />
+    </>
   );
 }
