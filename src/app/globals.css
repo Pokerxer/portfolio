@@ -1,243 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   Source tokens.
+
+   These use names distinct from Tailwind's `--color-*` / `--font-*` theme keys
+   on purpose. `@theme inline` below maps them across. If a theme key pointed at
+   a variable of its own name the declaration would be circular and resolve to
+   nothing.
+   --------------------------------------------------------------------------- */
+
 :root {
-  --background: #0a0a0f;
-  --foreground: #ffffff;
-  --neon-cyan: #00f5ff;
-  --neon-purple: #7c3aed;
-  --dark-800: #0d0d14;
-  --dark-700: #12121a;
-  --dark-600: #1a1a25;
+  color-scheme: light;
+
+  --paper: #faf9f7;
+  --ink: #111110;
+  --muted-ink: #6b6a66;
+  --hairline: #e0ded8;
+  --accent-ink: #d6421f;
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --paper: #0e0e0d;
+  --ink: #f4f2ee;
+  --muted-ink: #8f8d86;
+  --hairline: #26251f;
+  --accent-ink: #ff6a45;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-neon-cyan: var(--neon-cyan);
-  --color-neon-purple: var(--neon-purple);
-  --color-dark-800: var(--dark-800);
-  --color-dark-700: var(--dark-700);
-  --color-dark-600: var(--dark-600);
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Space Grotesk', sans-serif;
+  --color-bg: var(--paper);
+  --color-fg: var(--ink);
+  --color-muted: var(--muted-ink);
+  --color-rule: var(--hairline);
+  --color-accent: var(--accent-ink);
+
+  /* `--jw-*` are the next/font handles set on <html> by src/lib/fonts.ts. */
+  --font-display: var(--jw-display), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--jw-body), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--jw-mono), ui-monospace, "SF Mono", monospace;
 }
 
-/* Cursor */
-body {
-  cursor: default;
-}
+/* --------------------------------------------------------------------------- */
 
-.cursor-none {
-  cursor: none;
-}
-
-.cursor-none a,
-.cursor-none button {
-  cursor: none;
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: 'Inter', sans-serif;
-  overflow-x: hidden;
+  font-family: var(--jw-body), ui-sans-serif, system-ui, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
 }
 
-/* Custom cursor */
-.cursor-none {
-  cursor: none;
+::selection {
+  background: var(--accent-ink);
+  color: var(--paper);
 }
 
-.cursor-none * {
-  cursor: none !important;
+:focus-visible {
+  outline: 2px solid var(--accent-ink);
+  outline-offset: 3px;
 }
 
-/* Animated rings */
-@keyframes spin {
-  from {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
+.container-editorial {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
 }
 
-@keyframes spinReverse {
-  from {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-  to {
-    transform: translate(-50%, -50%) rotate(0deg);
-  }
-}
-
-/* Grid Background */
-.grid-bg {
-  background-image: 
-    linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
-  background-size: 50px 50px;
-  animation: gridMove 20s linear infinite;
-}
-
-@keyframes gridMove {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(50px); }
-}
-
-/* Glassmorphism */
-.glass {
-  background: rgba(18, 18, 26, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.glass-card {
-  background: rgba(18, 18, 26, 0.4);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.3s ease;
-}
-
-.glass-card:hover {
-  border-color: rgba(0, 245, 255, 0.3);
-  box-shadow: 0 0 30px rgba(0, 245, 255, 0.15);
-  transform: translateY(-5px);
-}
-
-/* Neon Glow */
-.neon-glow {
-  box-shadow: 0 0 10px rgba(0, 245, 255, 0.5), 0 0 20px rgba(0, 245, 255, 0.3);
-}
-
-.neon-text {
-  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5), 0 0 20px rgba(0, 245, 255, 0.3);
-}
-
-/* Buttons */
-.btn-primary {
-  background: linear-gradient(135deg, var(--neon-cyan), #00d4ff);
-  color: #0a0a0f;
+/* Editorial type scale. The gap between display and body is the whole point —
+   it is what stops the page reading as a default template. */
+.type-display {
+  font-family: var(--jw-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2.75rem, 9vw, 7rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
   font-weight: 600;
-  transition: all 0.3s ease;
 }
 
-.btn-primary:hover {
-  box-shadow: 0 0 20px rgba(0, 245, 255, 0.5), 0 0 40px rgba(0, 245, 255, 0.3);
-  transform: translateY(-2px);
+.type-title {
+  font-family: var(--jw-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.25rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  font-weight: 600;
 }
 
-.btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(0, 245, 255, 0.3);
-  color: var(--neon-cyan);
-  font-weight: 500;
-  transition: all 0.3s ease;
+.type-heading {
+  font-family: var(--jw-display), ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(1.375rem, 2.2vw, 1.875rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-weight: 600;
 }
 
-.btn-secondary:hover {
-  background: rgba(0, 245, 255, 0.1);
-  border-color: var(--neon-cyan);
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.2);
+.type-lead {
+  font-size: clamp(1.0625rem, 1.5vw, 1.25rem);
+  line-height: 1.6;
 }
 
-/* Typing Cursor */
-.typing-cursor {
-  display: inline-block;
-  width: 2px;
-  height: 1.2em;
-  background: var(--neon-cyan);
-  margin-left: 4px;
-  animation: blink 1s infinite;
+.type-eyebrow {
+  font-family: var(--jw-mono), ui-monospace, "SF Mono", monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
+/* Signature motion: the hairline draws itself in as its section enters. */
+.rule {
+  height: 1px;
+  width: 100%;
+  background: var(--hairline);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Scroll Animations */
-.fade-in {
+.rule[data-revealed="true"] {
+  transform: scaleX(1);
+}
+
+.reveal {
   opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.8s ease;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.fade-in.visible {
+.reveal[data-revealed="true"] {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
-/* Gradient text */
-.text-gradient {
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Glow ring */
-.glow-ring {
-  position: relative;
-}
-
-.glow-ring::before {
-  content: '';
-  position: absolute;
-  inset: -2px;
-  border-radius: inherit;
-  background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-  filter: blur(8px);
-}
-
-.glow-ring:hover::before {
-  opacity: 0.5;
-}
-
-/* Entrance animations */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
-  to {
+
+  /* Content must never depend on an animation that no longer runs. */
+  .reveal,
+  .rule {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
   }
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-@keyframes glow {
-  0%, 100% {
-    box-shadow: 0 0 5px rgba(0, 245, 255, 0.3);
-  }
-  50% {
-    box-shadow: 0 0 20px rgba(0, 245, 255, 0.6);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.animate-float {
-  animation: float 3s ease-in-out infinite;
-}
-
-.animate-glow {
-  animation: glow 2s ease-in-out infinite;
 }
