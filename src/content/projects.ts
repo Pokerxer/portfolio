@@ -31,7 +31,6 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     github: "https://github.com/Pokerxer/swiftpro",
     demo: "https://swiftpro-bice.vercel.app",
-    image: "/work/swiftpro.png",
     featured: true,
   },
   {
@@ -45,7 +44,6 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Redux", "Tailwind CSS"],
     github: "https://github.com/Pokerxer/kentaz-backend",
     demo: "https://www.kentazemporium.com",
-    image: "/work/kentaz.png",
     featured: true,
   },
   {
@@ -59,7 +57,6 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Admin", "Dashboard"],
     github: "https://github.com/Pokerxer/kentaz-backend",
     demo: "https://admin.kentazemporium.com",
-    image: "/work/kentaz-admin.png",
     featured: false,
   },
   {
@@ -73,7 +70,6 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce"],
     github: "https://github.com/Pokerxer/Christy-empire",
     demo: "https://christy-empire.vercel.app",
-    image: "/work/christy-empire.png",
     featured: false,
   },
   {
@@ -87,7 +83,6 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce"],
     github: "https://github.com/Pokerxer/ballandboujee",
     demo: "https://ballandboujee.com",
-    image: "/work/ball-and-boujee.png",
     featured: true,
   },
 ];
@@ -95,5 +90,11 @@ export const projects: Project[] = [
 // TODO(jordan): `year` and `role` are inferred, not recorded anywhere in the
 // repo — correct them if any are wrong. Everything else (title, summary, tags,
 // github, demo) is carried over verbatim from the previous project list.
+//
+// TODO(jordan): `image` is intentionally unset on every project because
+// /public/work/ is empty. Each card therefore renders its typographic
+// placeholder rather than a broken image. Drop a ~1600x1000 screenshot at
+// /public/work/<slug>.png and set `image: "/work/<slug>.png"` on that project
+// to switch it over. Slugs are the `slug` field above.
 
 export const featuredProjects = projects.filter((project) => project.featured);
