@@ -16,10 +16,12 @@ export function useReveal<T extends HTMLElement>() {
     if (!node) return;
 
     // No IntersectionObserver (very old browsers, some test envs): show the
-    // content rather than leaving it stuck at opacity 0.
+    // content rather than leaving it stuck at opacity 0. Deferred by a timeout
+    // so this is not a synchronous setState inside the effect body, which
+    // would cascade an extra render pass.
     if (typeof IntersectionObserver === "undefined") {
-      setRevealed(true);
-      return;
+      const timer = setTimeout(() => setRevealed(true), 0);
+      return () => clearTimeout(timer);
     }
 
     const observer = new IntersectionObserver(
