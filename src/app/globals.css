@@ -71,7 +71,19 @@ body {
   width: 100%;
   max-width: 72rem;
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .container-editorial {
+    padding-inline: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-editorial {
+    padding-inline: 2.5rem;
+  }
 }
 
 /* Editorial type scale. The gap between display and body is the whole point —
@@ -112,21 +124,35 @@ body {
   text-transform: uppercase;
 }
 
-/* Signature motion: the hairline draws itself in as its section enters. */
+/* Signature motion: the hairline draws itself in as its section enters.
+
+   The default state below is the *visible* end state. Content must never
+   depend on JavaScript to become visible — if the reveal mechanism fails
+   (blocked hydration, a silently broken IntersectionObserver), the page must
+   still render. The hidden-then-animate behaviour is opted into only under the
+   `.js` class, which THEME_SCRIPT (src/lib/theme.ts) adds to <html> before
+   first paint, so there is no flash of the visible state. */
 .rule {
   height: 1px;
   width: 100%;
   background: var(--hairline);
-  transform: scaleX(0);
   transform-origin: left;
+}
+
+.js .rule {
+  transform: scaleX(0);
   transition: transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.rule[data-revealed="true"] {
+.js .rule[data-revealed="true"] {
   transform: scaleX(1);
 }
 
 .reveal {
+  opacity: 1;
+}
+
+.js .reveal {
   opacity: 0;
   transform: translateY(1.25rem);
   transition:
@@ -134,9 +160,416 @@ body {
     transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.reveal[data-revealed="true"] {
+.js .reveal[data-revealed="true"] {
   opacity: 1;
   transform: none;
+}
+
+/* Hero entrance: each display line rises out of its own clipping mask.
+   Pure CSS — runs with or without JS; reduced motion shows the lines
+   immediately via the global override below. */
+.line-mask {
+  display: block;
+  overflow: hidden;
+}
+
+.line-inner {
+  display: block;
+  animation: line-rise 800ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.line-mask:nth-of-type(2) > .line-inner {
+  animation-delay: 120ms;
+}
+
+@keyframes line-rise {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* Staggered fade for the hero eyebrow/lead/CTA rows below the display type. */
+.fade-in-up {
+  opacity: 0;
+  animation: fade-in-up 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* Shorter variant for inline status messages (contact form). */
+.status-in {
+  animation: fade-in-up 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Hero atmosphere.
+
+   Two blurred color fields drift slowly behind the type (accent + an ink
+   tint, so the palette stays two-hue), over a faint drafting grid that fades
+   out radially. Transform-only animations — the blur is static per element,
+   so the compositor never re-rasterizes mid-scroll.
+   --------------------------------------------------------------------------- */
+
+.aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.aurora-a {
+  width: 46rem;
+  height: 46rem;
+  top: -16rem;
+  right: -14rem;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent-ink) 26%, transparent),
+    transparent 72%
+  );
+  opacity: 0.5;
+  animation: drift-a 24s ease-in-out infinite alternate;
+}
+
+.aurora-b {
+  width: 40rem;
+  height: 40rem;
+  bottom: -18rem;
+  left: -16rem;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--ink) 14%, transparent),
+    transparent 70%
+  );
+  opacity: 0.6;
+  animation: drift-b 30s ease-in-out infinite alternate;
+}
+
+[data-theme="dark"] .aurora-a {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--accent-ink) 34%, transparent),
+    transparent 72%
+  );
+  opacity: 0.6;
+}
+
+[data-theme="dark"] .aurora-b {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, #6366f1 16%, transparent),
+    transparent 70%
+  );
+}
+
+/* Small screens: smaller fields, same effect, far fewer blurred pixels. */
+@media (max-width: 639px) {
+  .aurora-a {
+    width: 30rem;
+    height: 30rem;
+    top: -10rem;
+    right: -10rem;
+  }
+
+  .aurora-b {
+    width: 26rem;
+    height: 26rem;
+    bottom: -12rem;
+    left: -12rem;
+  }
+}
+
+@keyframes drift-a {
+  from {
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    transform: translate(-7rem, 5rem) scale(1.18);
+  }
+}
+
+@keyframes drift-b {
+  from {
+    transform: translate(0, 0) scale(1.1);
+  }
+  to {
+    transform: translate(6rem, -4rem) scale(0.92);
+  }
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--ink) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--ink) 6%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 4.5rem 4.5rem;
+  mask-image: radial-gradient(
+    ellipse 90% 75% at 55% 30%,
+    black,
+    transparent 78%
+  );
+}
+
+/* Floating screenshot collage. Three levels so three transforms never fight:
+   wrap = entrance fade, floater = infinite bob, link = hover straighten. */
+.shot-wrap {
+  position: absolute;
+}
+
+.floater {
+  animation: float-y 7s ease-in-out infinite alternate;
+  animation-delay: var(--float-delay, 0s);
+}
+
+@keyframes float-y {
+  from {
+    transform: translateY(-0.4rem);
+  }
+  to {
+    transform: translateY(0.6rem);
+  }
+}
+
+.shot {
+  display: block;
+  overflow: hidden;
+  border: 1px solid var(--hairline);
+  background: var(--paper);
+  box-shadow: 0 30px 70px -24px rgb(0 0 0 / 0.45);
+  transform: rotate(var(--r, 0deg));
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.shot-wrap:hover .shot {
+  transform: rotate(0deg) scale(1.04);
+}
+
+.shot img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Collage geometry: three overlapping frames, rotated apart, stacked so the
+   eye reads main shot → support → accent. */
+.shot-1 {
+  top: 0;
+  right: 0;
+  width: 76%;
+  z-index: 1;
+}
+
+.shot-2 {
+  bottom: 1rem;
+  left: 0;
+  width: 60%;
+  z-index: 2;
+}
+
+.shot-3 {
+  right: 4%;
+  bottom: 30%;
+  width: 48%;
+  z-index: 3;
+}
+
+/* Scroll cue: a dot falls down a short hairline, resets, repeats. */
+.scroll-line {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 2.25rem;
+  background: var(--hairline);
+  overflow: hidden;
+}
+
+.scroll-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 0.625rem;
+  background: var(--accent-ink);
+  animation: scroll-fall 1.9s cubic-bezier(0.45, 0, 0.4, 1) infinite;
+}
+
+@keyframes scroll-fall {
+  from {
+    transform: translateY(-0.75rem);
+  }
+  to {
+    transform: translateY(2.75rem);
+  }
+}
+
+/* The accent word underlines itself a beat after the hero lines land. */
+.underline-draw {
+  background-image: linear-gradient(var(--accent-ink), var(--accent-ink));
+  background-repeat: no-repeat;
+  background-position: 0 94%;
+  background-size: 0% 0.07em;
+  animation: underline-grow 800ms 1100ms cubic-bezier(0.22, 1, 0.36, 1)
+    forwards;
+}
+
+@keyframes underline-grow {
+  to {
+    background-size: 100% 0.07em;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* Route entrance: every navigation fades the new page up gently. The wrapper
+   (components/ui/RouteFade.tsx) is keyed by pathname, so React remounts it
+   and the animation replays per route. */
+@keyframes route-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.route-fade {
+  animation: route-in 450ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Header drops in once per full page load. */
+@keyframes header-in {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+.header-in {
+  animation: header-in 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Project media: slow zoom on card hover, with an accent hairline that
+   brightens in step. Scoped to .media-frame so the treatment travels with the
+   component that uses it rather than every img on the page. */
+.media-frame {
+  overflow: hidden;
+  background: var(--hairline);
+}
+
+.media-frame img {
+  transition: transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .media-frame img,
+.media-frame:focus-visible img {
+  transform: scale(1.04);
+}
+
+/* Availability dot pulse. Decorative only; hidden under reduced motion below. */
+@keyframes dot-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-ink) 45%, transparent);
+  }
+  60% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+}
+
+.dot-pulse {
+  animation: dot-pulse 2.4s ease-out infinite;
+}
+
+/* Theme toggle: the icon rotates in when it swaps. Remounting the wrapper
+   (key={theme} in ThemeToggle) replays this on every toggle. */
+@keyframes icon-swap {
+  from {
+    transform: rotate(-90deg) scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+.icon-swap {
+  animation: icon-swap 350ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Stack marquee. The track holds two copies of the same sequence; translating
+   one full copy width (-50%) loops seamlessly. Pauses on hover/focus so the
+   items stay readable when someone aims at them. */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee {
+  /* Clip the max-content tracks — without this the band widens the document
+     and every page gets a horizontal scrollbar. */
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 46s linear infinite;
+}
+
+/* Second row: same loop, opposite direction, slightly slower — the offset
+   makes the band read as one object with depth rather than a ticker. */
+.marquee-track.marquee-reverse {
+  animation-direction: reverse;
+  animation-duration: 58s;
+}
+
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 8%,
+    black 92%,
+    transparent
+  );
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -149,10 +582,75 @@ body {
     scroll-behavior: auto !important;
   }
 
-  /* Content must never depend on an animation that no longer runs. */
-  .reveal,
-  .rule {
+  /* Content must never depend on an animation that no longer runs. These
+     match the `.js`-scoped hidden rules above at equal specificity and win by
+     source order, so reduced-motion visitors see content immediately. */
+  .js .reveal,
+  .js .rule {
     opacity: 1;
     transform: none;
+  }
+
+  .dot-pulse {
+    animation: none;
+  }
+
+  /* Entrance animations end-state = visible; reduced motion skips straight
+     there instead of playing a 0.01ms flash. */
+  .line-inner,
+  .fade-in-up,
+  .route-fade,
+  .header-in {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .status-in,
+  .icon-swap {
+    animation: none;
+  }
+
+  /* Atmosphere and collage freeze to their composed resting state. */
+  .aurora-a,
+  .aurora-b,
+  .floater,
+  .scroll-dot {
+    animation: none;
+  }
+
+  /* The reverse row is pure decoration; one static row is enough. */
+  .marquee-alt {
+    display: none;
+  }
+
+  .underline-draw {
+    animation: none;
+    background-size: 100% 0.07em;
+  }
+
+  .shot {
+    transform: rotate(var(--r, 0deg));
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+
+  /* Without the scroll the duplicate copy is dead weight — show one static row. */
+  .marquee-dup {
+    display: none;
+  }
+
+  .marquee-mask {
+    mask-image: none;
+  }
+}
+
+/* Smooth anchor scrolling for anyone who lands on #main via the skip link.
+   Reduced motion turns it off above. */
+@media (prefers-reduced-motion: no-preference) {
+  html:focus-within {
+    scroll-behavior: smooth;
   }
 }

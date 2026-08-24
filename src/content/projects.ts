@@ -19,10 +19,41 @@ export type Project = {
   caseStudy?: never;
 };
 
+// Newest first. Both DrinksHarbour entries share one monorepo
+// (github.com/Pokerxer/DrinksHarbour): `client/apps/platform` is the
+// marketplace + tenant storefronts, `client/apps/admin` is the back office.
 export const projects: Project[] = [
   {
-    slug: "swiftpro",
+    slug: "drinksharbour",
     index: "01",
+    title: "DrinksHarbour",
+    summary:
+      "Multi-tenant SaaS for the Nigerian beverage industry — a public marketplace where every subscribing business gets its own branded storefront, all selling from one shared catalogue.",
+    year: "2026",
+    role: "Full-stack",
+    tags: ["Next.js", "TypeScript", "Node.js", "MongoDB"],
+    github: "https://github.com/Pokerxer/DrinksHarbour",
+    demo: "https://www.drinksharbour.com",
+    image: "/work/drinksharbour.png",
+    featured: true,
+  },
+  {
+    slug: "drinksharbour-admin",
+    index: "02",
+    title: "DrinksHarbour Admin",
+    summary:
+      "The back office behind the marketplace — POS, inventory across warehouses, purchasing, sales orders, HR and appraisals, plus tenant administration for the whole platform.",
+    year: "2026",
+    role: "Full-stack",
+    tags: ["Next.js", "TypeScript", "Admin", "Dashboard"],
+    github: "https://github.com/Pokerxer/DrinksHarbour",
+    demo: "https://admin.drinksharbour.com",
+    image: "/work/drinksharbour-admin.png",
+    featured: false,
+  },
+  {
+    slug: "swiftpro",
+    index: "03",
     title: "Swiftpro",
     summary:
       "A modern Next.js application with TypeScript, featuring a sleek UI and optimized performance for web applications.",
@@ -31,11 +62,12 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "React"],
     github: "https://github.com/Pokerxer/swiftpro",
     demo: "https://swiftpro-bice.vercel.app",
+    image: "/work/swiftpro.png",
     featured: true,
   },
   {
     slug: "kentaz",
-    index: "02",
+    index: "04",
     title: "Kentaz",
     summary:
       "E-commerce and booking platform with modern UI, product catalog, shopping cart, checkout flow, and booking system.",
@@ -44,11 +76,12 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Redux", "Tailwind CSS"],
     github: "https://github.com/Pokerxer/kentaz-backend",
     demo: "https://www.kentazemporium.com",
+    image: "/work/kentaz.png",
     featured: true,
   },
   {
     slug: "kentaz-admin",
-    index: "03",
+    index: "05",
     title: "Kentaz Admin",
     summary:
       "Admin dashboard with inventory management, order tracking, customer management, and analytics.",
@@ -57,11 +90,12 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Admin", "Dashboard"],
     github: "https://github.com/Pokerxer/kentaz-backend",
     demo: "https://admin.kentazemporium.com",
+    image: "/work/kentaz-admin.png",
     featured: false,
   },
   {
     slug: "christy-empire",
-    index: "04",
+    index: "06",
     title: "Christy Empire",
     summary:
       "Modern e-commerce platform with responsive design and product catalog for fashion retail.",
@@ -70,11 +104,12 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce"],
     github: "https://github.com/Pokerxer/Christy-empire",
     demo: "https://christy-empire.vercel.app",
+    image: "/work/christy-empire.png",
     featured: false,
   },
   {
     slug: "ball-and-boujee",
-    index: "05",
+    index: "07",
     title: "Ball & Boujee",
     summary:
       "Sports and lifestyle e-commerce platform bridging basketball culture with high fashion from Abuja.",
@@ -83,18 +118,16 @@ export const projects: Project[] = [
     tags: ["Next.js", "TypeScript", "Tailwind CSS", "E-commerce"],
     github: "https://github.com/Pokerxer/ballandboujee",
     demo: "https://ballandboujee.com",
+    image: "/work/ball-and-boujee.png",
     featured: true,
   },
 ];
 
-// TODO(jordan): `year` and `role` are inferred, not recorded anywhere in the
-// repo — correct them if any are wrong. Everything else (title, summary, tags,
-// github, demo) is carried over verbatim from the previous project list.
-//
-// TODO(jordan): `image` is intentionally unset on every project because
-// /public/work/ is empty. Each card therefore renders its typographic
-// placeholder rather than a broken image. Drop a ~1600x1000 screenshot at
-// /public/work/<slug>.png and set `image: "/work/<slug>.png"` on that project
-// to switch it over. Slugs are the `slug` field above.
+// `image` points at a live screenshot captured from each project's public URL
+// (1600×1000 viewport). Re-capture if a project is redesigned: headless
+// Chromium at that size against the `demo` URL. The typographic fallback in
+// ProjectCard remains for any future project without a screenshot yet.
+// DrinksHarbour notes: the marketplace shows an age gate + promo modal on a
+// cold visit — dismiss both before capturing.
 
 export const featuredProjects = projects.filter((project) => project.featured);

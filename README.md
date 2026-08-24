@@ -39,17 +39,20 @@ environment variables (deployed).
 
 ## Assets
 
-Every asset slot has a graceful fallback, so the site looks complete before any
-file is added. Drop a file in, then set the matching field.
+Project screenshots are captured from each live site and committed to
+`public/work/`. The About-page portrait is still a slot waiting on a real
+photo — the monogram panel renders until then, by design.
 
-| Drop in | Dimensions | Then set | Fallback while missing |
-|---|---|---|---|
-| `public/jordan.jpg` | ~1200×1500 portrait | `site.photo = "/jordan.jpg"` in `src/content/site.ts` | Monogram panel (`JW`) |
-| `public/jordan-waldehz-cv.pdf` | — | `site.cv = "/jordan-waldehz-cv.pdf"` in `src/content/site.ts` | Download button hidden |
-| `public/work/<slug>.png` | ~1600×1000 | `image: "/work/<slug>.png"` on that project in `src/content/projects.ts` | Typographic placeholder (index, initial, accent rule) |
+| File | Status | Notes |
+|---|---|---|
+| `public/work/<slug>.png` | **Done** — all 5 present | 1600×1000 headless-Chromium captures of each project's `demo` URL. Re-capture after any project redesign. |
+| `public/jordan.jpg` | **Missing** — monogram fallback shows | Drop in ~1200×1500 portrait, set `site.photo = "/jordan.jpg"` in `src/content/site.ts`. |
+| `public/jordan-waldehz-cv.pdf` | **Missing** — CV button hidden | Drop in, set `site.cv = "/jordan-waldehz-cv.pdf"` in `src/content/site.ts`. |
 
-Project slugs: `swiftpro`, `kentaz`, `kentaz-admin`, `christy-empire`,
-`ball-and-boujee`.
+Project slugs: `drinksharbour`, `drinksharbour-admin`, `swiftpro`, `kentaz`,
+`kentaz-admin`, `christy-empire`, `ball-and-boujee`. Both DrinksHarbour entries
+share one monorepo (`Pokerxer/DrinksHarbour`); its marketplace screenshot
+required dismissing an age gate and a promo modal before capture.
 
 ## Content
 
@@ -78,8 +81,16 @@ there is verified either.
   `next/font/google`. Their CSS variables are named `--jw-*` rather than
   `--font-*` to avoid colliding with Tailwind v4's own `--font-*` theme keys,
   which would make the `@theme inline` mapping self-referential.
-- **Motion.** CSS transitions driven by one `IntersectionObserver` hook. No
-  animation library. Everything is gated behind
+- **Motion.** CSS transitions and keyframes driven by one
+  `IntersectionObserver` hook. No animation library. The hero is a
+  full-viewport scene: drifting aurora fields over a drafting grid, a floating
+  collage of the featured project screenshots, line-mask type entrance, a
+  self-drawing underline on "ship.", and a scroll cue. `Parallax` (rAF,
+  transform-only) drifts the aurora and collage against scroll. Route changes
+  fade through `RouteFade`; the stack band is two counter-scrolling marquee
+  rows; nav links get sliding underlines; stats count up on reveal. Scroll
+  reveals, filter re-entry staggers, and hover media zooms are all in
+  `globals.css`. Everything is gated behind
   `@media (prefers-reduced-motion: reduce)`.
 - **Rendering.** Server Components by default. `"use client"` only on
   `ThemeToggle`, `NavLinks`, `ProjectGrid`, `ContactForm`, `Reveal`, `Rule`,

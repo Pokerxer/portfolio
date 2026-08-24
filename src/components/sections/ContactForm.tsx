@@ -143,9 +143,10 @@ export default function ContactForm() {
       </button>
 
       <p
+        key={status.kind === "sent" || status.kind === "failed" ? status.message : status.kind}
         role="status"
         aria-live="polite"
-        className={`mt-4 min-h-[1.5rem] text-sm ${
+        className={`status-in mt-4 min-h-[1.5rem] text-sm ${
           status.kind === "failed" ? "text-accent" : "text-muted"
         }`}
       >

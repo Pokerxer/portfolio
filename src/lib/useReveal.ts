@@ -24,10 +24,18 @@ export function useReveal<T extends HTMLElement>() {
       return () => clearTimeout(timer);
     }
 
+    // Safety net: if the observer never reports — some webviews, privacy
+    // extensions, and instrumented environments create one that silently never
+    // fires — reveal anyway so content can't stay hidden. The timeout keeps
+    // this off the effect body's synchronous path, which
+    // react-hooks/set-state-in-effect forbids.
+    const fallback = setTimeout(() => setRevealed(true), 1500);
+
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
           if (entry.isIntersecting) {
+            clearTimeout(fallback);
             setRevealed(true);
             observer.unobserve(entry.target);
           }
@@ -37,7 +45,10 @@ export function useReveal<T extends HTMLElement>() {
     );
 
     observer.observe(node);
-    return () => observer.disconnect();
+    return () => {
+      clearTimeout(fallback);
+      observer.disconnect();
+    };
   }, []);
 
   return { ref, revealed };

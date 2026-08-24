@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import SiteFooter from "@/components/layout/SiteFooter";
 import SiteHeader from "@/components/layout/SiteHeader";
 import SkipLink from "@/components/layout/SkipLink";
+import RouteFade from "@/components/ui/RouteFade";
 import { SITE_URL, site } from "@/content/site";
 import { body, display, mono } from "@/lib/fonts";
 import { THEME_SCRIPT } from "@/lib/theme";
@@ -57,7 +58,7 @@ export default function RootLayout({
         <SkipLink />
         <SiteHeader />
         <main id="main" className="flex-1">
-          {children}
+          <RouteFade>{children}</RouteFade>
         </main>
         <SiteFooter />
       </body>

@@ -28,8 +28,8 @@ export type Stat = {
 // Every value below is derived only from facts already in this repo.
 export const stats: Stat[] = [
   { label: "Building since", value: "2022", note: "Wyn City onwards" },
-  { label: "Products shipped", value: "5", note: "All client-facing" },
-  { label: "Live in production", value: "5", note: "Public URLs" },
+  { label: "Products shipped", value: "7", note: "All client-facing" },
+  { label: "Live in production", value: "7", note: "Public URLs" },
 ];
 
 export const site = {

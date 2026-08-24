@@ -17,7 +17,7 @@ export default function WorkPage() {
       <section className="container-editorial py-20">
         <SectionHeading
           eyebrow="Selected work"
-          title="Five products, all live in production."
+          title="Seven products, all live in production."
         />
 
         <p className="type-lead mt-6 max-w-prose text-muted">

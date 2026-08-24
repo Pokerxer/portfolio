@@ -3,6 +3,7 @@ import Image from "next/image";
 import ClosingCTA from "@/components/sections/ClosingCTA";
 import JourneyTimeline from "@/components/sections/JourneyTimeline";
 import CTA from "@/components/ui/CTA";
+import Reveal from "@/components/ui/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { site } from "@/content/site";
 import { stack } from "@/content/stack";
@@ -24,7 +25,7 @@ export default function AboutPage() {
         />
 
         <div className="mt-14 grid gap-12 md:grid-cols-12 md:gap-10">
-          <div className="md:col-span-5">
+          <Reveal className="md:col-span-5">
             {site.photo ? (
               <Image
                 src={site.photo}
@@ -40,16 +41,17 @@ export default function AboutPage() {
               // composed rather than leaving a hole or a broken image.
               <div
                 aria-hidden="true"
-                className="flex aspect-[4/5] w-full items-center justify-center border border-rule bg-fg/[0.04]"
+                className="flex aspect-[4/5] w-full flex-col items-center justify-center gap-6 border border-rule bg-fg/[0.04]"
               >
                 <span className="font-display text-7xl font-semibold tracking-tight text-fg/20">
                   {site.initials}
                 </span>
+                <span className="block h-px w-12 bg-accent" />
               </div>
             )}
-          </div>
+          </Reveal>
 
-          <div className="md:col-span-7">
+          <Reveal delay={100} className="md:col-span-7">
             <div className="max-w-prose space-y-5 text-muted">
               <p className="type-lead text-fg">
                 I&rsquo;m {site.name}, a {site.role.toLowerCase()} based in{" "}
@@ -79,7 +81,7 @@ export default function AboutPage() {
                 </CTA>
               </div>
             ) : null}
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -96,8 +98,8 @@ export default function AboutPage() {
         </h2>
 
         <dl className="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {stack.map((group) => (
-            <div key={group.group}>
+          {stack.map((group, i) => (
+            <Reveal key={group.group} delay={Math.min(i * 80, 240)}>
               <dt className="border-b border-rule pb-3 font-mono text-xs uppercase tracking-[0.18em] text-muted">
                 {group.group}
               </dt>
@@ -110,7 +112,7 @@ export default function AboutPage() {
                   ))}
                 </ul>
               </dd>
-            </div>
+            </Reveal>
           ))}
         </dl>
       </section>

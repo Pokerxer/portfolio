@@ -6,7 +6,6 @@ import StackStrip from "@/components/sections/StackStrip";
 import Reveal from "@/components/ui/Reveal";
 import StatBlock from "@/components/ui/StatBlock";
 import { site } from "@/content/site";
-
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
@@ -17,24 +16,18 @@ export default function Home() {
       <Hero />
 
       <section className="container-editorial py-10" aria-label="Track record">
-        <Reveal>
-          <div className="grid gap-10 sm:grid-cols-3 sm:gap-6">
-            {site.stats.map((stat) => (
-              <StatBlock key={stat.label} stat={stat} />
-            ))}
-          </div>
-        </Reveal>
+        <div className="grid gap-10 sm:grid-cols-3 sm:gap-6">
+          {site.stats.map((stat) => (
+            <StatBlock key={stat.label} stat={stat} />
+          ))}
+        </div>
       </section>
 
-      <Reveal delay={80}>
-        <FeaturedWork />
-      </Reveal>
+      <FeaturedWork />
+
+      <StackStrip />
 
       <Reveal delay={120}>
-        <StackStrip />
-      </Reveal>
-
-      <Reveal delay={160}>
         <ClosingCTA />
       </Reveal>
     </>
